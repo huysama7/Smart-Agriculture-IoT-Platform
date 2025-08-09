@@ -31,8 +31,6 @@
 
     <modules>
         <module>authentication-service</module>
-        <module>core-builder</module>
-        <module>dto-builder</module>
         <module>common-service</module>
         <module>device-service</module>
         <module>sensor-data-service</module>
@@ -41,6 +39,9 @@
         <module>analytics-service</module>
         <module>automation-service</module>
         <module>weather-service</module>
+
+        <module>builder-core</module>
+        <module>builder-dto</module>
     </modules>
     <dependencyManagement>
         <dependencies>

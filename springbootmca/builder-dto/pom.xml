@@ -9,7 +9,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>core-builder</artifactId>
+    <artifactId>builder-dto</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

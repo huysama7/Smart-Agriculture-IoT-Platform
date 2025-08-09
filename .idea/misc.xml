@@ -10,6 +10,8 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/springbootmca/core-builder/pom.xml" />
+        <option value="$PROJECT_DIR$/springbootmca/dto-builder/pom.xml" />
         <option value="$PROJECT_DIR$/src/backend/java-springboots/mc/pom.xml" />
       </set>
     </option>
