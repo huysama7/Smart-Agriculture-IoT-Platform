@@ -53,7 +53,7 @@ public class HamaPersistenceConfgiDB {
                 .build();
     }
 
-    public void logInfo(String persistenceUnit) {
+    private void logInfo(String persistenceUnit) {
         System.out.println("###################--"+persistenceUnit+"--########################");
         System.out.println("Initializing HamaPersistenceConfgiDB with the following parameters:");
         System.out.println("Username: " + this.username);
