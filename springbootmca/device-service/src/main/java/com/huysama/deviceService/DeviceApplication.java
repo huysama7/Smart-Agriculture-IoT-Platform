@@ -10,9 +10,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         "com.huysama.builderCore.config.iotDB",
         "com.huysama.builderCore.repositories.iot",
 })
-public class DeviceServiceApplication {
+public class DeviceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DeviceServiceApplication.class, args);
+        SpringApplication.run(DeviceApplication.class, args);
     }
 
 }

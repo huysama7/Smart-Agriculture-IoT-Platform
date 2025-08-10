@@ -114,8 +114,10 @@ services:
     environment:
       - CONSUL_HOST=consul-discovery
       - SPRING_PROFILES_ACTIVE=docker
-    ports:
-      - "4301:4301"
+#    ports:
+#      - "4301:4301"
+    deploy:
+      replicas: 3
     depends_on:
       - consul-discovery
       - traefik

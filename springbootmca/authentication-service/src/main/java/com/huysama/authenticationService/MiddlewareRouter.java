@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MiddlewareRouter {
     @GetMapping("/auth/verify")
     public ResponseEntity<?> verify(@RequestHeader("Authorization") String authHeader) {
+
+        System.out.println("Instance ID: " + MiddleWareConfig.instance);
         if (authHeader.contains("Huy")) {
             return ResponseEntity.ok().build();
         }
