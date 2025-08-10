@@ -38,6 +38,8 @@ public class IoTPersistenceDB {
     Integer maximum_pool_size;
     @Value("${spring.datasource.entity-path}")
     String entity_path;
+    @Value("${spring.datasource.current-schema}")
+    String schema;
 
     @Bean(name = "IotHamaPersistenceConfgiDB")
     public HamaPersistenceConfgiDB iotHamaPersistenceConfgiDB() {
@@ -47,6 +49,7 @@ public class IoTPersistenceDB {
                 .jdbc_url(this.jdbc_url)
                 .driver(this.driver)
                 .entityPath(this.entity_path)
+                .schema(this.schema)
                 .minimumIdle(this.minimumidle)
                 .maximumPoolSize(this.maximum_pool_size)
                 .build();
