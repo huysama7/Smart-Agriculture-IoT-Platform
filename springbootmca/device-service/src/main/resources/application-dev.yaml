@@ -12,16 +12,21 @@ spring:
         health-check-interval: 10s
         tags:
           - traefik.enable=true
+          # Router cho context-path /{serviceName}
           - traefik.http.routers.${spring.application.name}.rule=PathPrefix(`/${spring.application.name}`)
-          - traefik.http.routers.${spring.application.name}.entrypoints=https
-          - traefik.http.routers.${spring.application.name}.tls=true
+          - traefik.http.routers.${spring.application.name}.entrypoints=http
           - traefik.http.routers.${spring.application.name}.middlewares=${spring.application.name}-strip
           - traefik.http.middlewares.${spring.application.name}-strip.stripPrefix.prefixes=/${spring.application.name}
 
-          - traefik.http.routers.${spring.application.name}-http.rule=PathPrefix(`/${spring.application.name}`)
-          - traefik.http.routers.${spring.application.name}-http.entrypoints=http
-          - traefik.http.routers.${spring.application.name}-http.middlewares=${spring.application.name}-strip
-          - traefik.http.middlewares.${spring.application.name}-http-strip.stripPrefix.prefixes=/${spring.application.name}
+          # Router riêng cho API cần auth
+          - traefik.http.routers.${spring.application.name}-api.rule=PathPrefix(`/${spring.application.name}/api`)
+          - traefik.http.routers.${spring.application.name}-api.entrypoints=http
+          - traefik.http.routers.${spring.application.name}-api.middlewares=${spring.application.name}-strip,auth-forward
+
+          # Middleware dùng cho forward auth
+          - traefik.http.middlewares.auth-forward.forwardauth.address=http://authentication-service:4301/auth/verify
+          - traefik.http.middlewares.auth-forward.forwardauth.trustForwardHeader=true
+          - traefik.http.middlewares.auth-forward.forwardauth.authResponseHeaders=X-User-Id,X-User-Role
 
 management:
   endpoints:
@@ -31,3 +36,15 @@ management:
   endpoint:
     health:
       show-details: always
+
+logging:
+  level:
+    org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.security.web.DefaultSecurityFilterChain: ERROR
+    org.springframework.security.config.annotation.web.builders.WebSecurity: ERROR
+    org.springframework.data.repository.config: ERROR

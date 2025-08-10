@@ -1,0 +1,26 @@
+spring:
+  config:
+    import: "optional:consul:"
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      discovery:
+        instanceId: ${spring.application.name}:${random.value}
+        health-check-path: /actuator/health
+        health-check-interval: 30s
+        tags:
+          - traefik.enable=true
+          - traefik.http.routers.${spring.application.name}-http.rule=PathPrefix(`/${spring.application.name}`)
+          - traefik.http.routers.${spring.application.name}-http.entrypoints=http
+          - traefik.http.routers.${spring.application.name}-http.middlewares=${spring.application.name}-strip
+          - traefik.http.middlewares.${spring.application.name}-http-strip.stripPrefix.prefixes=/${spring.application.name}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

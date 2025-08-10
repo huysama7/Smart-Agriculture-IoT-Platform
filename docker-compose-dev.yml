@@ -117,7 +117,7 @@ services:
 #    ports:
 #      - "4301:4301"
     deploy:
-      replicas: 3
+      replicas: 1
     depends_on:
       - consul-discovery
       - traefik

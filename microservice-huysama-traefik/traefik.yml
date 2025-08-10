@@ -9,8 +9,12 @@ api:
 entryPoints:
   http:
     address: ":80"
+    forwardedHeaders:
+      insecure: true
   https:
     address: ":443"
+    forwardedHeaders:
+      insecure: true
   admin:
     address: ":8082"
 metrics:

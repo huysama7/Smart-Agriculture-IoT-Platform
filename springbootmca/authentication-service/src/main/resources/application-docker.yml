@@ -21,6 +21,7 @@ spring:
           # Middleware dùng lại toàn hệ thống
           - traefik.http.middlewares.auth-forward.forwardauth.address=http://authentication-service:4301/auth/verify
           - traefik.http.middlewares.auth-forward.forwardauth.trustForwardHeader=true
+          - traefik.http.middlewares.auth-forward.forwardauth.authResponseHeaders=X-User-Id,X-User-Role
 
           # Định nghĩa service và router cho chính nó
           - traefik.http.services.${my-app.context-path}.loadbalancer.server.port=${server.port}
@@ -28,6 +29,7 @@ spring:
           - traefik.http.routers.${my-app.context-path}.entrypoints=http
           - traefik.http.routers.${my-app.context-path}.middlewares=${my-app.context-path}-strip
           - traefik.http.middlewares.${my-app.context-path}-strip.stripPrefix.prefixes=/${my-app.context-path}
+
 
 management:
   endpoints:
@@ -42,3 +44,10 @@ logging:
   level:
     org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor: DEBUG
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type.descriptor.sql: TRACE
+    org.springframework.security: DEBUG
+    org.springframework.security.web.DefaultSecurityFilterChain: ERROR
+    org.springframework.security.config.annotation.web.builders.WebSecurity: ERROR
+    org.springframework.data.repository.config: ERROR
