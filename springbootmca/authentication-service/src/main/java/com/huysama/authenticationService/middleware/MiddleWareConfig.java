@@ -1,4 +1,4 @@
-package com.huysama.authenticationService;
+package com.huysama.authenticationService.middleware;
 
 
 import com.huysama.builderDto.config.HamaRequestLoggingConfig;

@@ -1,15 +1,14 @@
-package com.huysama.authenticationService;
+package com.huysama.authenticationService.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.huysama.authenticationService.middleware.MiddleWareConfig;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Log4j2
-public class MiddlewareRouter {
+public class MiddlewareController {
     @RequestMapping(value = "/auth/verify", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<?> verify(@RequestHeader(value = "Authorization", required = false) String authHeader) {
         System.out.println("Instance ID: " + MiddleWareConfig.instance);
