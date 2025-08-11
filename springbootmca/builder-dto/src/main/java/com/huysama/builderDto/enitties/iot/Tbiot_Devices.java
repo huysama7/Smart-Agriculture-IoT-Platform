@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class Tbiot_Devices extends BaseEntity {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    @NotNull
     private Long device_id;
     @NotBlank
     private String device_name;

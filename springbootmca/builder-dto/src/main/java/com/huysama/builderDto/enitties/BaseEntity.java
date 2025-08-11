@@ -1,5 +1,6 @@
 package com.huysama.builderDto.enitties;
 
+import com.huysama.builderDto.config.UserContextHolder;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
@@ -31,16 +32,22 @@ public abstract class BaseEntity {
     @PrePersist
     protected void onCreate() {
         this.create_date = new Date();
-        this.create_by = getCurrentUsername(); // Lấy từ Keycloak
+        this.create_by = UserContextHolder.getCurrentUserId() != null
+                ? UserContextHolder.getCurrentUserId()
+                : "system";
         if (this.organization_id == null) {
-            this.organization_id = getCurrentOrganizationId(); // Lấy từ token Keycloak
+            this.organization_id = UserContextHolder.getCurrentOrgId() != null
+                    ? UserContextHolder.getCurrentOrgId()
+                    : "default-org";
         }
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.modify_date = new Date();
-        this.modify_by = "system";
+        this.modify_by = UserContextHolder.getCurrentUserId() != null
+                ? UserContextHolder.getCurrentUserId()
+                : "system";
     }
 
     private String getCurrentUsername() {

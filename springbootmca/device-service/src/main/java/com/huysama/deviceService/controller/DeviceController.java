@@ -27,6 +27,12 @@ public class DeviceController {
     public List<Tbiot_Devices> getDevices(@RequestBody Tbiot_Devices filter,@RequestHeader Map<String, String> headers) {
         log.info("Instance ID: {}", headers);
         log.info("Fetching devices with filter: {}", filter);
+        deviceService.addDevice(Tbiot_Devices.builder()
+                .device_name("Device 1")
+                .location("Location 1")
+                .status("Active")
+                .type("Type A")
+                .build());
         return deviceService.getDevices(filter);
     }
 }
