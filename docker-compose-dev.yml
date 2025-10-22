@@ -123,18 +123,63 @@ services:
       - traefik
     networks:
       - huysama-network
-#    restart: unless-stopped
-#  jaeger:
-#    image: jaegertracing/all-in-one:1.56
-#    ports:
-#      - "16686:16686"    # Jaeger UI
-#      - "6831:6831/udp"  # Jaeger agent (UDP, thường cho client libs cũ hơn)
-#      - "5778:5778"      # Sampling config
-#      # OpenTelemetry Collector mặc định dùng các cổng sau:
-#      - "4317:4317"      # OTLP gRPC receiver
-#      - "4318:4318"      # OTLP HTTP receiver
-#    networks:
-#      - huysama-network
+
+  kafka:
+    image: apache/kafka:4.0.1
+    container_name: kafka
+    environment:
+      # Bật chế độ KRaft (thay cho Zookeeper)
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_NODE_ID: 1
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+
+      # Các thiết lập cơ bản
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      # Giảm warning (vì đây là môi trường dev đơn node)
+      KAFKA_MIN_INSYNC_REPLICAS: 1
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./my-volumes/kafka:/var/lib/kafka/data
+
+    networks:
+      - huysama-network
+    restart: unless-stopped
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    networks:
+      - huysama-network
+    restart: unless-stopped
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly
+    container_name: dragonfly
+    restart: unless-stopped
+    ulimits:
+      memlock: -1                 # Cho phép lock memory, tăng hiệu năng (Redis-style)
+    ports:
+      - "6379:6379"
+    # network_mode: "host"        # ✅ Nếu chạy local, có thể bật để giảm độ trễ (chỉ Linux)
+    volumes:
+      - ./my-volumes/dragonfly/data:/data
+    networks:
+      - huysama-network           # 🔗 Thêm vào mạng chung của bạn
+
 networks:
   huysama-network:
     driver: bridge
